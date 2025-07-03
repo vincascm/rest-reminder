@@ -1,0 +1,23 @@
+# macOS specific files
+.DS_Store
+
+# Swift Package Manager
+.swiftpm/
+.build/
+
+# Xcode
+*.xcodeproj/project.xcworkspace/
+*.xcodeproj/xcuserdata/
+
+# Build artifacts
+build/
+
+# DMG creation temporary files
+dmg_temp/
+*.dmg
+*.temp.dmg
+
+# Other common ignores
+.vscode/
+.idea/
+*.log
