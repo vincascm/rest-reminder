@@ -15,7 +15,7 @@ struct PreferencesView: View {
                 } maximumValueLabel: {
                     Text("60 min")
                 }
-                .onChange(of: reminderInterval) { _ in
+                .onChange(of: reminderInterval) {
                     NotificationCenter.default.post(name: .preferencesDidChange, object: nil)
                 }
             }
@@ -30,7 +30,7 @@ struct PreferencesView: View {
                 } maximumValueLabel: {
                     Text("300 sec")
                 }
-                .onChange(of: breakDuration) { _ in
+                .onChange(of: breakDuration) {
                     NotificationCenter.default.post(name: .preferencesDidChange, object: nil)
                 }
             }

@@ -4,7 +4,7 @@ import SwiftUI
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var timer: Timer?
-    var reminderWindow: NSWindow?
+    var reminderWindows: [NSWindow] = []
     var statusBarItem: NSStatusItem!
     var preferencesWindow: NSWindow?
 
@@ -42,46 +42,50 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     @objc func showReminder() {
-        if reminderWindow == nil {
-            guard let screen = NSScreen.main else { return }
-            let screenRect = screen.visibleFrame
-            let width = screenRect.width * 0.7
-            let height = screenRect.height * 0.7
+        if reminderWindows.isEmpty {
+            let randomRed = Double.random(in: 0...1)
+            let randomGreen = Double.random(in: 0...1)
+            let randomBlue = Double.random(in: 0...1)
+            let backgroundColor = Color(red: randomRed, green: randomGreen, blue: randomBlue)
 
-            let reminderView = ReminderView(width: width, height: height, initialCountdown: Int(breakDuration)) {
-                self.closeReminder()
-            }
-            
-            let hostingView = NSHostingView(rootView: reminderView)
-            
-            reminderWindow = NSWindow(
-                contentRect: NSRect(x: 0, y: 0, width: width, height: height),
-                styleMask: .borderless,
-                backing: .buffered,
-                defer: false
-            )
-            reminderWindow?.isOpaque = false
-            reminderWindow?.backgroundColor = .clear
-            reminderWindow?.hasShadow = false
-            reminderWindow?.center()
-            reminderWindow?.isReleasedWhenClosed = false
-            reminderWindow?.level = .floating
-            reminderWindow?.contentView = hostingView
-            reminderWindow?.makeKeyAndOrderFront(nil)
-            
-            // Center the window
-            if let screenSize = NSScreen.main?.visibleFrame.size {
-                let windowSize = reminderWindow!.frame.size
-                let x = (screenSize.width - windowSize.width) / 2
-                let y = (screenSize.height - windowSize.height) / 2
-                reminderWindow?.setFrameOrigin(NSPoint(x: x, y: y))
+            for screen in NSScreen.screens {
+                let screenRect = screen.visibleFrame
+                let width = screenRect.width * 0.7
+                let height = screenRect.height * 0.7
+
+                let reminderView = ReminderView(width: width, height: height, initialCountdown: Int(breakDuration), backgroundColor: backgroundColor) {
+                    self.closeReminder()
+                }
+                
+                let hostingView = NSHostingView(rootView: reminderView)
+                
+                let newWindow = NSWindow(
+                    contentRect: NSRect(x: 0, y: 0, width: width, height: height),
+                    styleMask: .borderless,
+                    backing: .buffered,
+                    defer: false
+                )
+                newWindow.isOpaque = false
+                newWindow.backgroundColor = .clear
+                newWindow.hasShadow = false
+                
+                let x = screenRect.origin.x + (screenRect.size.width - width) / 2
+                let y = screenRect.origin.y + (screenRect.size.height - height) / 2
+                newWindow.setFrameOrigin(NSPoint(x: x, y: y))
+
+                newWindow.isReleasedWhenClosed = false
+                newWindow.level = .floating
+                newWindow.contentView = hostingView
+                newWindow.makeKeyAndOrderFront(nil)
+                
+                reminderWindows.append(newWindow)
             }
         }
     }
 
     func closeReminder() {
-        reminderWindow?.close()
-        reminderWindow = nil
+        reminderWindows.forEach { $0.close() }
+        reminderWindows.removeAll()
     }
 
     @objc func showPreferences() {

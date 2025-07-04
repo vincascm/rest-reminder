@@ -14,29 +14,21 @@ struct ReminderView: View {
 
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
-    init(width: CGFloat, height: CGFloat, initialCountdown: Int, closeAction: @escaping () -> Void) {
+    init(width: CGFloat, height: CGFloat, initialCountdown: Int, backgroundColor: Color, closeAction: @escaping () -> Void) {
         self.width = width
         self.height = height
         self.closeAction = closeAction
-        self.initialCountdown = initialCountdown // Assign to the new property
+        self.initialCountdown = initialCountdown
         self._countdown = State(initialValue: initialCountdown)
+        self._backgroundColor = State(initialValue: backgroundColor)
         
-        let randomRed = Double.random(in: 0...1)
-        let randomGreen = Double.random(in: 0...1)
-        let randomBlue = Double.random(in: 0...1)
-        let newBackgroundColor = Color(red: randomRed, green: randomGreen, blue: randomBlue)
-
-        let nsColor = NSColor(red: randomRed, green: randomGreen, blue: randomBlue, alpha: 1.0)
-        
-        let newTextColor: Color
+        // Determine text color based on background brightness
+        let nsColor = NSColor(backgroundColor)
         if let brightness = nsColor.usingColorSpace(.genericRGB)?.brightnessComponent, brightness < 0.5 {
-            newTextColor = .white
+            self._textColor = State(initialValue: .white)
         } else {
-            newTextColor = .black
+            self._textColor = State(initialValue: .black)
         }
-        
-        self._backgroundColor = State(initialValue: newBackgroundColor)
-        self._textColor = State(initialValue: newTextColor)
     }
     
     var body: some View {
