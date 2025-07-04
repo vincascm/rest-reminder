@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PreferencesView: View {
-    @AppStorage("reminderInterval") private var reminderInterval: Double = 120
+    @AppStorage("reminderInterval") private var reminderInterval: Double = 2400
     @AppStorage("breakDuration") private var breakDuration: Double = 60
 
     var body: some View {

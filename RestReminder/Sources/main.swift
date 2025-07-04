@@ -8,7 +8,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var statusBarItem: NSStatusItem!
     var preferencesWindow: NSWindow?
 
-    @AppStorage("reminderInterval") var reminderInterval: Double = 120 // Default 2 minutes
+    @AppStorage("reminderInterval") var reminderInterval: Double = 2400 // Default 40 minutes
     @AppStorage("breakDuration") var breakDuration: Double = 60 // Default 1 minute
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
