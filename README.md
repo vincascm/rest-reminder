@@ -1,3 +1,5 @@
+[English](./README.md) / [中文](./README_ZH.md)
+
 # Rest Reminder for macOS
 
 Rest Reminder is a simple macOS application that periodically reminds you to take a break from your computer. It features a customizable reminder interval, break duration, and a visually appealing pop-up window.
@@ -6,6 +8,7 @@ Rest Reminder is a simple macOS application that periodically reminds you to tak
 
 -   **Customizable Reminder Interval**: Set how often you want to be reminded to take a break.
 -   **Customizable Break Duration**: Define how long the break reminder window stays on screen.
+-   **Skip Reminders**: Skip the next one or two reminders.
 -   **Floating Reminder Window**: A pop-up window appears on top of all other applications.
 -   **Dynamic Window Sizing**: The reminder window automatically scales to 70% of your screen's visible area.
 -   **Random Background Colors**: Each reminder window features a random background color with adaptive text color for readability.
@@ -40,6 +43,10 @@ Click the leaf icon in the menu bar and select "Preferences..." to open the sett
 -   **Break Duration**: How long the reminder window stays on screen (in seconds).
 
 Your settings will be saved automatically.
+
+## Skip Reminders
+
+Click the leaf icon in the menu bar and select "Skip Reminder" to skip the next one or two reminders.
 
 ## How to Create a DMG Installer
 

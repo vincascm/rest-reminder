@@ -7,9 +7,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var reminderWindows: [NSWindow] = []
     var statusBarItem: NSStatusItem!
     var preferencesWindow: NSWindow?
+    var skipCount = 0
 
-    @AppStorage("reminderInterval") var reminderInterval: Double = 2400 // Default 40 minutes
-    @AppStorage("breakDuration") var breakDuration: Double = 60 // Default 1 minute
+    @AppStorage(UserSettings.reminderInterval) var reminderInterval: Double = 2400 // Default 40 minutes
+    @AppStorage(UserSettings.breakDuration) var breakDuration: Double = 60 // Default 1 minute
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the status bar item
@@ -19,6 +20,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
 
         let menu = NSMenu()
+
+        // Skip submenu
+        let skipMenu = NSMenu()
+        let skipMenuItem = NSMenuItem(title: "Skip Reminder", action: nil, keyEquivalent: "")
+        skipMenuItem.submenu = skipMenu
+        menu.addItem(skipMenuItem)
+
+        skipMenu.addItem(NSMenuItem(title: "Skip Next Reminder", action: #selector(skipNextReminder), keyEquivalent: ""))
+        skipMenu.addItem(NSMenuItem(title: "Skip Next 2 Reminders", action: #selector(skipNextTwoReminders), keyEquivalent: ""))
+
+        menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Preferences...", action: #selector(showPreferences), keyEquivalent: ","))
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
@@ -41,7 +53,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         timer = Timer.scheduledTimer(timeInterval: reminderInterval, target: self, selector: #selector(showReminder), userInfo: nil, repeats: true)
     }
 
+    @objc func skipNextReminder() {
+        skipCount = 1
+    }
+
+    @objc func skipNextTwoReminders() {
+        skipCount = 2
+    }
+
     @objc func showReminder() {
+        if skipCount > 0 {
+            skipCount -= 1
+            return
+        }
+
         if reminderWindows.isEmpty {
             let randomRed = Double.random(in: 0...1)
             let randomGreen = Double.random(in: 0...1)

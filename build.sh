@@ -23,7 +23,7 @@ fi
 swiftc -o "${APP_BUNDLE_PATH}/Contents/MacOS/${APP_NAME}" \
     -swift-version 5 \
     -sdk "${SDK_PATH}" \
-    "${SOURCES_DIR}/main.swift" "${SOURCES_DIR}/ReminderView.swift" "${SOURCES_DIR}/PreferencesView.swift"
+    "${SOURCES_DIR}/main.swift" "${SOURCES_DIR}/ReminderView.swift" "${SOURCES_DIR}/PreferencesView.swift" "${SOURCES_DIR}/UserSettings.swift"
 
 # Check if compilation was successful
 if [ $? -ne 0 ]; then
